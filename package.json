@@ -1,7 +1,7 @@
 {
   "name": "my-todo-app",
   "private": true,
-  "homepage": "https://michella1233/github.io/Michella-Todo-App",
+  "homepage": "https://michella1233.github.io/Michella-Todo-App",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
