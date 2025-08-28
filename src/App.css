@@ -10,8 +10,101 @@
   align-items: center;
   margin: 0px;
   border-right: 2px solid #f0c0c0;
-  width: 100%;
+  width: 20vw;
 }
+
+.hamburger {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .left-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 70vw;
+    /* take up most of screen */
+    background: #ffe3e3;
+    /* give it background */
+    transform: translateX(-100%);
+    /* hidden */
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
+  }
+
+  .left-container.active {
+    transform: translateX(0);
+    /* slide in */
+  }
+
+  .hamburger {
+    display: block;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 30px;
+    height: 25px;
+    cursor: pointer;
+    z-index: 1100;
+    /* above sidebar */
+  }
+
+  .hamburger span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background: #333;
+    margin: 5px 0;
+    border-radius: 2px;
+  }
+}
+
+@media (max-width: 600px) {
+  .left-container-dark {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 70vw;
+    /* take up most of screen */
+    background: #484848;
+    /* dark mode */
+    color: #f0f0f0;
+    /* give it background */
+    transform: translateX(-100%);
+    /* hidden */
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
+  }
+
+  .left-container-dark.active {
+    transform: translateX(0);
+    /* slide in */
+  }
+
+  .hamburger {
+    display: block;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 30px;
+    height: 25px;
+    cursor: pointer;
+    z-index: 1100;
+    /* above sidebar */
+  }
+
+  .hamburger span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background: #333;
+    margin: 5px 0;
+    border-radius: 2px;
+  }
+}
+
 
 .profile-container {
   display: flex;
@@ -20,6 +113,12 @@
   align-items: flex-start;
   height: 30vh;
   width: 65%;
+}
+
+@media(max-width:600px) {
+  .profile-container {
+    align-items: center;
+  }
 }
 
 .pp {
@@ -75,6 +174,21 @@
   border-radius: 5px;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
+}
+
+.date-container:hover {
+  background: #ffb6c1;
+  /* same pink highlight */
+  color: white;
+  border-color: #ffb6c1;
+  transform: scale(1.05);
+  /* slight pop effect */
+}
+
+.date-container:active {
+  transform: scale(0.95);
+  /* press-down effect */
 }
 
 .create-new-list {
@@ -158,6 +272,16 @@
   padding: 0px 10px;
 }
 
+@media(max-width: 1000px) {
+  .plus-square-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+  }
+}
+
 .plus-square {
   height: 45px;
   width: 45px;
@@ -188,6 +312,7 @@
 
 
 .right-container {
+  width: 80vw;
   display: flex;
   flex-direction: column;
   margin: 0px;
@@ -196,12 +321,21 @@
   height: 100vh;
 }
 
+@media(max-width:888px) {
+  .right-container {
+    margin-left: 0px;
+    padding-right: 0px;
+    align-items: center;
+    width: 100vw;
+  }
+}
+
 .right-container-header {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  height: 20%;
+  height: 20vh;
 }
 
 .todo-header {
@@ -209,8 +343,19 @@
   flex-direction: row;
   justify-content: flex-start;
   align-items: baseline;
-  width: 100%;
+  width: 60vw;
   height: auto;
+}
+
+@media(max-width:600px) {
+  .todo-header {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    margin-top: none;
+    justify-content: center;
+    padding-top: 10px;
+  }
 }
 
 .todo-title {
@@ -228,10 +373,10 @@
   width: 100%;
   height: 100%;
   line-height: 1.4;
-  flex: 0.65;
+  width: 41.5vw;
 }
 
-.todo-title-dark{
+.todo-title-dark {
   display: flex;
   margin-top: 50px;
   align-items: center;
@@ -246,7 +391,17 @@
   width: 100%;
   height: 100%;
   line-height: 1.4;
-  flex: 0.65;
+  flex: 0.55;
+}
+
+@media(max-width:600px) {
+  .todo-title {
+    margin-top: 20px;
+  }
+
+  .todo-title-dark {
+    margin-top: 20px;
+  }
 }
 
 .todo-title::placeholder {
@@ -264,23 +419,16 @@
 .add-date {
   display: flex;
   margin-right: 0px;
-  height: 20px;
+  height: auto;
   width: auto;
   max-width: 120px;
-  flex: 0.35;
-}
-
-.add-date {
   padding: 8px 12px;
   border: 2px solid #ffb6c1;
-  /* light pink border */
   border-radius: 12px;
   background: #fff0f5;
-  /* light lavender pink background */
   font-size: 14px;
-  font-family: 'Comic Sans MS', 'Segoe UI', cursive;
+  font-family: "Poppins", sans-serif;
   color: #ff69b4;
-  /* hot pink text */
   outline: none;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -300,9 +448,9 @@
 }
 
 
-.add-todo {
+.background-mode {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   width: 20%;
 }
@@ -444,7 +592,7 @@
   color: gray;
 }
 
-.profile-dark{
+.profile-dark {
   padding: 8px;
   margin: 0px;
   font-weight: bold;
