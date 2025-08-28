@@ -1,7 +1,7 @@
 import plusSquare from './assets/plus-square.png'
 import dayjs from 'dayjs'
 
-export function CreateNewList({ title, setTitle, date, setDate, headerList, setHeaderList, todos, setTodos, setRender, render, setInput, isDarkMode }) {
+export function CreateNewList({ title, setTitle, date, setDate, headerList, setHeaderList, todos, setTodos, setRender, render, setInput, isDarkMode, isSidebarOpen, setIsSidebarOpen }) {
 
   const formatted = dayjs().format("YYYY-MM-DD");
 
@@ -20,6 +20,7 @@ export function CreateNewList({ title, setTitle, date, setDate, headerList, setH
     setTodos([]);
     setRender(null);
     setInput('')
+    setIsSidebarOpen(!isSidebarOpen);
   }
 
   function selectedTitle(id) {
@@ -27,6 +28,7 @@ export function CreateNewList({ title, setTitle, date, setDate, headerList, setH
 
     if (selectedItem) {
       setRender(selectedItem);
+      setIsSidebarOpen(!isSidebarOpen);
     }
   }
 
@@ -58,25 +60,29 @@ export function CreateNewList({ title, setTitle, date, setDate, headerList, setH
     <>
       <div className='list-container'>
         {((todos && todos.length > 0) || title !== "" || date !== "") && (<div className='create-new-list-container'>
-          <div className='date-container'>
+          <div
+            onClick={() => setRender(null)}
+            className='date-container'>
             <div className='day'>{date ? dayjs(date).format("ddd") : dayjs().format('ddd')}</div>
             <div className='date'>{date ? dayjs(date).format("DD") : dayjs().format('DD')}</div>
           </div>
           <div
             onClick={() => setRender(null)}
-            className={isDarkMode?'create-new-list-dark':'create-new-list'}>{title ? title : 'New list'}</div>
+            className={isDarkMode ? 'create-new-list-dark' : 'create-new-list'}>{title ? title : 'New list'}</div>
           <button className='headerlist-delete-button' onClick={handleDeleteNewTitle}>delete</button>
         </div>)}
 
         {[...headerList].reverse().map((item) => (
           <div key={item.id} className='create-new-list-container'>
-            <div className='date-container date-container-none'>
+            <div
+              onClick={() => selectedTitle(item.id)}
+              className='date-container'>
               <div className='day'>{dayjs(item.date).format('ddd')}</div>
               <div className='date'>{dayjs(item.date).format('DD')}</div>
             </div>
             <div
               onClick={() => selectedTitle(item.id)}
-              className={isDarkMode?'create-new-list-dark':'create-new-list'}>{item.title ? item.title : 'New title'}</div>
+              className={isDarkMode ? 'create-new-list-dark' : 'create-new-list'}>{item.title ? item.title : 'New title'}</div>
             <button className='headerlist-delete-button' onClick={() => handleDeleteHeader(item.id)}>delete</button>
           </div>
         ))}
