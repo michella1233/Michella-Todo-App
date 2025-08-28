@@ -1,134 +1,99 @@
-import './App.css'
-import profilePicture from './assets/avatar4.png'
-import sun from './assets/sun.png'
-import moon from './assets/moon.png'
-import hamburger from './assets/hamburger.png'
-import hamburgerDark from './assets/hamburgerDark.png'
-import { TodoContent } from './TodoContent'
-import { CreateNewList } from './CreateNewTitle'
-import { TodoHeader } from './TodoHeader'
-import { useState, useEffect } from 'react'
-import { useRef } from "react";
+import plusSquare from './assets/plus-square.png'
+import dayjs from 'dayjs'
 
-function App() {
-  const [todos, setTodos] = useState(() => {
-    const saved = localStorage.getItem('todos');
-    return saved ? JSON.parse(saved) : [];
-  });
-  const [title, setTitle] = useState(() => {
-    const saved = localStorage.getItem('title');
-    return saved ? JSON.parse(saved) : "";
-  });
+export function CreateNewList({ title, setTitle, date, setDate, headerList, setHeaderList, todos, setTodos, setRender, render, setInput, isDarkMode, isSidebarOpen, setIsSidebarOpen }) {
 
-  const [input, setInput] = useState('');
+  const formatted = dayjs().format("YYYY-MM-DD");
 
-  const [date, setDate] = useState(() => {
-    const saved = localStorage.getItem('date');
-    return saved ? JSON.parse(saved) : "";
-  });
+  function handleClickButton() {
 
-  const [headerList, setHeaderList] = useState(() => {
-    const saved = localStorage.getItem("headerList");
-    return saved ? JSON.parse(saved) : [];
-  });
+    const newItem = {
+      id: crypto.randomUUID(),
+      title: title.trim() === "" ? "New list" : title,
+      date: date ? date : formatted,
+      todo: todos
+    }
 
-  const todoInputRef = useRef(null);
-
-  const [render, setRender] = useState(null)
-
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    const saved = localStorage.getItem("isDarkMode");
-    return saved ? JSON.parse(saved) : false;
-  });
-
-  useEffect(() => {
-    if (isDarkMode) {
-      document.body.classList.add("dark");
-    } else {
-      document.body.classList.remove("dark");
-    };
-    localStorage.setItem('isDarkMode', isDarkMode)
-  }, [isDarkMode]);
-
-
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-    function toggleSidebar() {
+    setHeaderList([...headerList, newItem]);
+    setDate("");
+    setTitle("");
+    setTodos([]);
+    setRender(null);
+    setInput('')
     setIsSidebarOpen(!isSidebarOpen);
   }
 
+  function selectedTitle(id) {
+    const selectedItem = headerList.find((item) => item.id === id);
+
+    if (selectedItem) {
+      setRender(selectedItem);
+      setIsSidebarOpen(!isSidebarOpen);
+    }
+  }
+
+  function handleDeleteHeader(id) {
+    setHeaderList(prev => prev.filter(item => item.id !== id));
+
+    if (render?.id === id) {
+      setRender(null);
+    }
+  }
+
+  function handleReset() {
+    setTitle("");
+    setDate("");
+    setHeaderList([])
+    setTodos([]);
+    setDate('');
+    setRender(null);
+  }
+
+  function handleDeleteNewTitle() {
+    setTitle("");
+    setDate("");
+    setTodos([]);
+    setInput("")
+  }
 
   return (
-    <div className={"container"}>
-      <div 
-      className={`left-container ${isSidebarOpen ? "active" : ""} ${isDarkMode ? "left-container-dark" : ""}`}  
-      id="sidebar">
-        <div className='profile-container'>
-          <img className='pp' src={profilePicture} />
-          <p className={isDarkMode ? 'profile-dark' : 'profile-light'}>My Todo List</p>
-        </div>
-        <CreateNewList
-          title={title}
-          date={date}
-          setDate={setDate}
-          setTitle={setTitle}
-          headerList={headerList}
-          setHeaderList={setHeaderList}
-          todos={todos}
-          setTodos={setTodos}
-          setRender={setRender}
-          render={render}
-          setInput={setInput}
-          isDarkMode={isDarkMode}
-          isSidebarOpen={isSidebarOpen}
-          setIsSidebarOpen={setIsSidebarOpen}
-        />
-      </div>
-      <div className='right-container'>
-        <img
-          onClick={toggleSidebar}
-          className='hamburger'
-          src={isDarkMode ? hamburgerDark : hamburger}
-        />
-        <div className='right-container-header'>
-          <div>
-            <TodoHeader
-              title={title}
-              date={date}
-              setTitle={setTitle}
-              setDate={setDate}
-              headerList={headerList}
-              setHeaderList={setHeaderList}
-              setTodos={setTodos}
-              todoInputRef={todoInputRef}
-              render={render}
-              setRender={setRender}
-              isDarkMode={isDarkMode}
-            />
+    <>
+      <div className='list-container'>
+        {((todos && todos.length > 0) || title !== "" || date !== "") && (<div className='create-new-list-container'>
+          <div
+            onClick={() => setRender(null)}
+            className='date-container'>
+            <div className='day'>{date ? dayjs(date).format("ddd") : dayjs().format('ddd')}</div>
+            <div className='date'>{date ? dayjs(date).format("DD") : dayjs().format('DD')}</div>
           </div>
-          <div className='background-mode'>
-            <img
-              className='sun'
-              src={isDarkMode ? moon : sun}
-              onClick={() => setIsDarkMode(!isDarkMode)}
-            />
+          <div
+            onClick={() => setRender(null)}
+            className={isDarkMode ? 'create-new-list-dark' : 'create-new-list'}>{title ? title : 'New list'}</div>
+          <button className='headerlist-delete-button' onClick={handleDeleteNewTitle}>delete</button>
+        </div>)}
+
+        {[...headerList].reverse().map((item) => (
+          <div key={item.id} className='create-new-list-container'>
+            <div
+              onClick={() => selectedTitle(item.id)}
+              className='date-container'>
+              <div className='day'>{dayjs(item.date).format('ddd')}</div>
+              <div className='date'>{dayjs(item.date).format('DD')}</div>
+            </div>
+            <div
+              onClick={() => selectedTitle(item.id)}
+              className={isDarkMode ? 'create-new-list-dark' : 'create-new-list'}>{item.title ? item.title : 'New title'}</div>
+            <button className='headerlist-delete-button' onClick={() => handleDeleteHeader(item.id)}>delete</button>
           </div>
-        </div>
-        <div className='right-container-body'>
-          <TodoContent
-            todos={todos}
-            setTodos={setTodos}
-            todoInputRef={todoInputRef}
-            render={render}
-            setRender={setRender}
-            setHeaderList={setHeaderList}
-            input={input}
-            setInput={setInput}
-          />
-        </div>
+        ))}
       </div>
-    </div>
+      <div className='plus-square-container'>
+        <img className='plus-square' src={plusSquare}
+          onClick={handleClickButton}
+        />
+        <button className='delete-all' onClick={handleReset}>Reset all</button>
+      </div>
+
+    </>
   )
 }
-
-export default App
