@@ -3,10 +3,11 @@ body{
   padding: 0px 0px;
   font-family: "Poppins", sans-serif;
   font-size: 14px;
-  background: linear-gradient(135deg, #ffe0f0, #ffd6d6);
+  background: #ffd6d6;
+  overflow-x: hidden;
 }
 
 body.dark {
-  background: linear-gradient(135deg, #1a1a1a, #333333); /* dark mode */
+  background:#333333; /* dark mode */
   color: #f0f0f0;
 }
